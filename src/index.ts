@@ -2,7 +2,7 @@ import { Telegraf, Context } from 'telegraf';
 import { Markup } from 'telegraf';
 import { UserModel, User } from './model/user';
 import { connectDB } from './config';
-
+const http = require('http');
 const bot = new Telegraf('7620733878:AAHjyRdgM6NH-VnWVuPoQlKIyfBTc4ToG14');
 const calculateTax = (grossSalary: number) => {
     let taxRate = 0;
@@ -173,7 +173,32 @@ async function startBot() {
 
 
     // Start the bot
-    bot.launch();
+    //ethiopian-tax-calculator.vercel.app
+
+    // bot.launch();
+    try {
+
+
+        bot.launch({
+          webhook: {
+            domain: 'https://ethiopian-tax-calculator.vercel.app/',
+            hookPath: '/my-secret-path',
+          },
+        });
+        console.log('Bot is running!');
+        http.createServer(bot.webhookCallback('/my-secret-path')).listen(3000);
+      
+      
+      
+      } catch (e:any) {
+        console.error(`Couldn't connect to Telegram - ${e.message}; trying again in 5 seconds...`);
+      
+        // Wait for 5 seconds before attempting to reconnect
+        new Promise((resolve) => setTimeout(resolve, 5000));
+      
+      
+      
+      }
     console.log('Bot is running...');
 }
 
