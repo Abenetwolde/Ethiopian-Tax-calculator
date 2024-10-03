@@ -99,7 +99,7 @@ async function startBot() {
                 // Send welcome message with a reply keyboard
                 await ctx.reply(
                     `Welcome ${newUser.firstname}! Please choose an option below:`,
-                    Markup.keyboard(['Tax Rates', 'Pension Contribution'])
+                    Markup.keyboard([['Tax Rates', 'Pension Contribution']])
                         .resize()
 
                 );
@@ -108,13 +108,22 @@ async function startBot() {
                 await ctx.reply('Please enter your gross salary:');
             } else {
                 console.log("User already registered:", existingUser);
-                await ctx.reply('Welcome back! Please enter your gross salary:');
+                await ctx.reply('Welcome back! Please enter your gross salary:', Markup.keyboard([['Tax Rates', 'Pension Contribution']])
+                .resize());
             }
         } catch (error) {
             console.log(error)
         }
 
     });
+    bot.telegram.setMyCommands([
+        { command: 'start', description: 'Start The Bot' },
+        { command: 'taxrates', description: 'Employment income tax rates' },
+        { command: 'penstioncontribution', description: 'Employment Penstion' },
+
+      
+        // { command: 'location', description: 'Location' }
+      ]);
     bot.command("taxrates", handleTaxRates);
 
     // Use hears for "Tax Rates"
@@ -175,30 +184,30 @@ async function startBot() {
     // Start the bot
     //ethiopian-tax-calculator.vercel.app
 
-    // bot.launch();
-    try {
+    bot.launch();
+    // try {
 
 
-        bot.launch({
-          webhook: {
-            domain: 'https://ethiopian-tax-calculator.vercel.app/',
-            hookPath: '/my-secret-path',
-          },
-        });
-        console.log('Bot is running!');
-        http.createServer(bot.webhookCallback('/my-secret-path')).listen(3000);
+    //     bot.launch({
+    //       webhook: {
+    //         domain: 'https://ethiopian-tax-calculator.vercel.app/',
+    //         hookPath: '/my-secret-path',
+    //       },
+    //     });
+    //     console.log('Bot is running!');
+    //     http.createServer(bot.webhookCallback('/my-secret-path')).listen(3000);
       
       
       
-      } catch (e:any) {
-        console.error(`Couldn't connect to Telegram - ${e.message}; trying again in 5 seconds...`);
+    //   } catch (e:any) {
+    //     console.error(`Couldn't connect to Telegram - ${e.message}; trying again in 5 seconds...`);
       
-        // Wait for 5 seconds before attempting to reconnect
-        new Promise((resolve) => setTimeout(resolve, 5000));
+    //     // Wait for 5 seconds before attempting to reconnect
+    //     new Promise((resolve) => setTimeout(resolve, 5000));
       
       
       
-      }
+    //   }
     console.log('Bot is running...');
 }
 
